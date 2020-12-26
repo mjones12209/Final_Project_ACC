@@ -1,13 +1,13 @@
 const path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const { NoEmitOnErrorsPlugin } = require('webpack');
 
 module.exports = { 
     mode: "development",
-    entry: './src/index.js',
+    devtool: false,
+    entry: './src/',
     output: {
-        path: path.resolve(__dirname, "dist"),
+        path:path.resolve(__dirname, "dist"),
         filename: "index_bundle.js",        
-        publicPath: "dist"
     },
     module: {
         rules: [
@@ -22,15 +22,15 @@ module.exports = {
                 }
             }, 
             {
-            test: /\.s[ac].ss$/i,
-            use: ["style-loader","css-loader","sass-loader"]
+            test: /\.css$/i,
+            use: ["style-loader","css-loader"]
             }
         ]
     },
     devServer: {
-        publicPath: "/assets/",
-        contentBase: path.resolve(__dirname, "./public"),
-        watchContentBase: true
+        contentBase: path.resolve(__dirname),
+        watchContentBase: true,
+        compress: true,
+        port: 5992
     },
-    plugins: [new HtmlWebpackPlugin()]
 }
