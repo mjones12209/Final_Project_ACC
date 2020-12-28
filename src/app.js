@@ -1,18 +1,26 @@
 import axios from "axios";
-import { apiKEY, apiURL } from "../keys/keys.js";
+import {apiKEY} from "../keys/keys";
+import { dropDownShow } from "./dom";
 
-const options = {
-  method: 'GET',
-  url: apiURL,
-  params: {genre: '/chart/popular/genre/adventure'},
-  headers: {
-    'x-rapidapi-key': '8545fffcfemsh2deb8c538d7662ep187974jsn8ad67a359f16',
-    'x-rapidapi-host': 'imdb8.p.rapidapi.com'
-  }
-};
 
-axios.request(options).then(function (response) {
-	console.log(response.data);
-}).catch(function (error) {
-	console.error(error);
-});
+
+const populateGenre = () => {
+    const options = {
+        method: 'GET',
+        url: `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKEY}&language=en-US`
+
+        };
+          
+        axios.request(options).then( (response) => {
+            console.log(response.data);
+            
+            response.data.genres.forEach(element => {
+              dropDownShow.insertAdjacentHTML("beforeend", `<a class='dropdown-item'>${element.name}</a>`);
+            console.log(dropDownShow)
+            });
+        }).catch( (error) => {
+            console.error(error);
+        });
+}
+
+export {populateGenre};

@@ -1,1 +1,3 @@
-const testButton = document.querySelector("[data-link]")
+const dropDownShow = document.querySelector("#navbarSupportedContent > div > div");
+
+export { dropDownShow };

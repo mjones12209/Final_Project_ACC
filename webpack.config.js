@@ -31,6 +31,7 @@ module.exports = {
         contentBase: path.resolve(__dirname),
         watchContentBase: true,
         compress: true,
-        port: 5992
+        port: 5992,
+        open:true
     },
 }
