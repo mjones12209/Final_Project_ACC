@@ -1,3 +1,26 @@
 div.main-content {
-    background: gray;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 5%;
+}
+
+
+ div.main-content div {
+    display: block;
+    padding:1%;
+    margin: 1%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 100%;
+    width: 45%;
+} 
+
+div.main-content div * {
+    text-align: center;
+}
+
+div.main-content h1 {
+    text-align: center;
+    display: block;
+    width: 100%;
 }

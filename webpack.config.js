@@ -4,7 +4,7 @@ const { NoEmitOnErrorsPlugin } = require('webpack');
 module.exports = { 
     mode: "development",
     devtool: false,
-    entry: './src/',
+    entry: './src/index.js',
     output: {
         path:path.resolve(__dirname, "dist"),
         filename: "index_bundle.js",        
@@ -24,7 +24,7 @@ module.exports = {
             {
             test: /\.css$/i,
             use: ["style-loader","css-loader"]
-            }
+            },
         ]
     },
     devServer: {
