@@ -1,7 +1,7 @@
 import axios from "axios";
 import {apiKEY} from "../keys/keys";
 import  * as DOMEl from "./dom";
-import {cleanThis, urlEncode, createTitle,MovieContainer} from "./utils";
+import {cleanThis, urlEncode, createTitle,MovieContainer, filterPicture, filterDesc} from "./utils";
 
 //request genre
 const requestGenre = (genreID,genreName) => {
@@ -12,8 +12,10 @@ const requestGenre = (genreID,genreName) => {
     axios.request(options).then((response) => { 
         createTitle(genreName, DOMEl.mainContent)
         response.data.results.forEach((element, index) => {
+            let picture =  filterPicture(element.backdrop_path);
+            let desc = filterDesc(element.overview);
             if (index > 20){return;}
-            const container = new MovieContainer("div",element.title,element.backdrop_path,element.overview,DOMEl.mainContent,element.release_date);
+            const container = new MovieContainer("div",element.title,picture.filteredPicture,desc.filteredDesc,DOMEl.mainContent,element.release_date);
             container.createAndAttch();
         });
     }).catch(error => console.log(error));
@@ -61,8 +63,10 @@ const searchFunction = () => {
             DOMEl.mainContent.innerHTML = "";
             if(response.data.results.length === 0){alert("No results found.")}
             response.data.results.forEach((element, index)=>{
+                let picture =  filterPicture(element.backdrop_path);
+                let desc = filterDesc(element.overview);
                 if (index >= 30) {return;}
-                const container = new MovieContainer("div",element.title,element.backdrop_path,element.overview,DOMEl.mainContent,element.release_date);
+                const container = new MovieContainer("div",element.title,picture.filteredPicture,desc.filteredDesc,DOMEl.mainContent,element.release_date);
                 container.createAndAttch();
             });
         }).catch(error => console.log(error));
@@ -73,5 +77,31 @@ const searchFunction = () => {
 
 }
 
+//new movies
+const newMovies = () => {
+    let d = new Date();
+    DOMEl.newMoviesLink.addEventListener("click",() => {
+        DOMEl.mainContent.innerHTML="";
+        let options = {
+            method: 'GET',
+            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKEY}&language=en-US&sort_by=release_date.desc&primary_release_year=${d.getFullYear()}&include_adult=false&include_video=false&page=1`
+        }
 
-export {populateGenre, searchFunction};
+        axios.request(options).then((response)=>{
+            response.data.results.forEach( (element, index)=> {
+                let picture =  filterPicture(element.backdrop_path);
+                let desc = filterDesc(element.overview);
+                if(index > 30){return;}
+                const container = new MovieContainer("div",element.title,picture.filteredPicture,desc.filteredDesc,DOMEl.mainContent,element.release_date);
+                container.createAndAttch();
+            });
+        });
+    });
+}
+
+
+export {
+    populateGenre, 
+    searchFunction, 
+    newMovies
+};

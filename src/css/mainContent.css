@@ -1,3 +1,6 @@
+body {
+    text-align: center !important;
+}
 div.main-content {
     display:flex;
     flex-wrap: wrap;
@@ -16,7 +19,8 @@ div.main-content {
 } 
 
 div.main-content div * {
-    text-align: center;
+    text-align: center !important;
+    justify-content: center;
 }
 
 div.main-content h1 {

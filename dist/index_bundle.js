@@ -1860,7 +1860,8 @@ var apiKEY = "10540af3ab762a4a1a5f46590a4e59cf";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "populateGenre": () => /* binding */ populateGenre,
-/* harmony export */   "searchFunction": () => /* binding */ searchFunction
+/* harmony export */   "searchFunction": () => /* binding */ searchFunction,
+/* harmony export */   "newMovies": () => /* binding */ newMovies
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
@@ -1880,13 +1881,11 @@ var requestGenre = function requestGenre(genreID, genreName) {
     url: "https://api.themoviedb.org/3/discover/movie?api_key=".concat(_keys_keys__WEBPACK_IMPORTED_MODULE_1__.apiKEY, "&language=en-US&sort_by=popularity.desc&with_genres=").concat(genreID, "&include_adult=false&include_video=false&page=1") };
 
   axios__WEBPACK_IMPORTED_MODULE_0___default().request(options).then(function (response) {
-    // let title = document.createElement("h1");
-    // title.innerHTML = genreName;
-    // DOMEl.mainContent.appendChild(title);
     (0,_utils__WEBPACK_IMPORTED_MODULE_3__.createTitle)(genreName, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent);
     response.data.results.forEach(function (element, index) {
       if (index > 20) {return;}
-      (0,_utils__WEBPACK_IMPORTED_MODULE_3__.createMovieContainerElement)("div", element.title, element.backdrop_path, element.overview, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent);
+      var container = new _utils__WEBPACK_IMPORTED_MODULE_3__.MovieContainer("div", element.title, element.backdrop_path, element.overview, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent, element.release_date);
+      container.createAndAttch();
     });
   })["catch"](function (error) {return console.log(error);});
 
@@ -1920,7 +1919,6 @@ var populateGenre = function populateGenre() {
 
 //search function on the page
 var searchFunction = function searchFunction() {
-
   _dom__WEBPACK_IMPORTED_MODULE_2__.searchButton.addEventListener('click', function (e) {
     var dirtyInput = _dom__WEBPACK_IMPORTED_MODULE_2__.searchInput.value;
     var queryReadyInput = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.urlEncode)(dirtyInput, 's');
@@ -1932,19 +1930,41 @@ var searchFunction = function searchFunction() {
     e.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_0___default().request(options).then(function (response) {
       _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent.innerHTML = "";
+      if (response.data.results.length === 0) {alert("No results found.");}
       response.data.results.forEach(function (element, index) {
         if (index >= 30) {return;}
-        new _utils__WEBPACK_IMPORTED_MODULE_3__.MovieContainer("div", element.title, element.backdrop_path, element.overview, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent);
+        var container = new _utils__WEBPACK_IMPORTED_MODULE_3__.MovieContainer("div", element.title, element.backdrop_path, element.overview, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent, element.release_date);
+        container.createAndAttch();
       });
-
-
-
     })["catch"](function (error) {return console.log(error);});
 
   });
 
 
 
+};
+
+var newMovies = function newMovies() {
+  var d = new Date();
+  _dom__WEBPACK_IMPORTED_MODULE_2__.newMoviesLink.addEventListener("click", function () {
+    var options = {
+      method: 'GET',
+      url: "https://api.themoviedb.org/3/discover/movie?api_key=".concat(_keys_keys__WEBPACK_IMPORTED_MODULE_1__.apiKEY, "&language=en-US&sort_by=release_date.desc&primary_release_year=").concat(d.getFullYear(), "&include_adult=false&include_video=false&page=1") };
+
+
+    axios__WEBPACK_IMPORTED_MODULE_0___default().request(options).then(function (response) {
+      response.data.results.forEach(function (element, index) {
+        var picture = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.filterPicture)(element.backdrop_path);
+        var desc = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.filterDesc)(element.overview);
+        if (index > 30) {return;}
+        console.log(picture);
+        console.log(element.backdrop_path);
+        console.log(element.overview);
+        var container = new _utils__WEBPACK_IMPORTED_MODULE_3__.MovieContainer("div", element.title, picture.picture, desc.filteredDesc, _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent, element.release_date);
+        container.createAndAttch();
+      });
+    });
+  });
 };
 
 
@@ -1958,20 +1978,22 @@ var searchFunction = function searchFunction() {
   \********************/
 /***/ ((module) => {
 
-//for populate genre
 var dropDownShow = document.querySelector("#navbarSupportedContent > div > div");
 
-//search function
 var searchButton = document.querySelector("#navbarSupportedContent > form > button");
+
 var searchInput = document.querySelector("#navbarSupportedContent > form > input");
 
 var mainContent = document.querySelector(".main-content");
+
+var newMoviesLink = document.querySelector("[data-newMovies]");
 
 module.exports = {
   dropDownShow: dropDownShow,
   searchButton: searchButton,
   searchInput: searchInput,
-  mainContent: mainContent };
+  mainContent: mainContent,
+  newMoviesLink: newMoviesLink };
 
 /***/ }),
 
@@ -1984,21 +2006,19 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app */ "./src/app.js");
+//*********CSS Styles********//
 __webpack_require__(/*! ./css/navHeader.css */ "./src/css/navHeader.css");
 __webpack_require__(/*! ./css/navComponent.css */ "./src/css/navComponent.css");
 __webpack_require__(/*! ./css/buttons.css */ "./src/css/buttons.css");
 __webpack_require__(/*! ./css/mainContent.css */ "./src/css/mainContent.css");
-// import * as log from "./log"; //debug
+__webpack_require__(/*! ./css/footer.css */ "./src/css/footer.css");
+//***************************//
 
 
+
+(0,_app__WEBPACK_IMPORTED_MODULE_0__.newMovies)();
 (0,_app__WEBPACK_IMPORTED_MODULE_0__.populateGenre)();
 (0,_app__WEBPACK_IMPORTED_MODULE_0__.searchFunction)();
-
-
-
-// debug
-// log.logFunc().logDomSelectors();
-// log.logFunc().logDropDownsAfterAjax();
 
 /***/ }),
 
@@ -2013,9 +2033,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "cleanThis": () => /* binding */ cleanThis,
 /* harmony export */   "urlEncode": () => /* binding */ urlEncode,
-/* harmony export */   "createMovieContainerElement": () => /* binding */ createMovieContainerElement,
 /* harmony export */   "createTitle": () => /* binding */ createTitle,
-/* harmony export */   "MovieContainer": () => /* binding */ MovieContainer
+/* harmony export */   "MovieContainer": () => /* binding */ MovieContainer,
+/* harmony export */   "filterPicture": () => /* binding */ filterPicture,
+/* harmony export */   "filterDesc": () => /* binding */ filterDesc
 /* harmony export */ });
 /* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dompurify */ "./node_modules/dompurify/dist/purify.js");
 /* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_0__);
@@ -2033,10 +2054,28 @@ var urlEncode = function urlEncode(htmlInput, flags) {
     var queryReady = cleanInput.replace(/ /g, '+');
     return queryReady;
   }
-};var
+};
 
-MovieContainer =
-function MovieContainer(parentElement, title, picture, desc, location) {var _this = this;_classCallCheck(this, MovieContainer);this.
+var filterPicture = function filterPicture(backdrop_path) {
+  var picture;
+  if (backdrop_path === null) {
+    picture = "https://www.hallaminternet.com/assets/show.jpg";
+  } else if (backdrop_path !== null) {
+    picture = "https://image.tmdb.org/t/p/w500/" + backdrop_path;
+  }
+
+  return {
+    picture: picture };
+
+};
+
+//Movie element container
+var MovieContainer =
+function MovieContainer(parentElement, title, picture, desc, location, release) {var _this = this;_classCallCheck(this, MovieContainer);this.
+
+
+
+
 
 
 
@@ -2052,30 +2091,30 @@ function MovieContainer(parentElement, title, picture, desc, location) {var _thi
   createAndAttch = function () {
     _this.container.insertAdjacentHTML("beforeend", _this.cleanString);
     _this.location.appendChild(_this.container);
-  };this.container = document.createElement(parentElement);this.imagePrepend = "https://image.tmdb.org/t/p/w500/";this.htmlString = "\n            <h2>".concat(title, "</h2>\n            <figure class=\"figure\">\n                <img src=\"").concat(imagePrepend + picture, "\" class=\"figure-img img-fluid rounded\"  alt=").concat(title, " />\n                <figcaption class=\"figure-caption\">").concat(desc, "</figcaption>\n            </figure>\n        ");this.cleanString = dompurify__WEBPACK_IMPORTED_MODULE_0___default().sanitize(this.htmlString);this.location = location;};
+  };this.container = document.createElement(parentElement); // this.imagePrepend = "https://image.tmdb.org/t/p/w500/";
+  this.picture = picture;this.title = title;this.desc = desc;this.htmlString = "\n            <h2>".concat(title, "</h2>\n            <h6><b>Release Date: </b> ").concat(release, "</h6>\n            <figure class=\"figure\">\n                <img src=\"").concat(this.picture, "\" class=\"figure-img img-fluid rounded\"  alt=").concat(this.title, " />\n                <figcaption class=\"figure-caption\">").concat(this.desc, "</figcaption>\n            </figure>\n        ");this.cleanString = dompurify__WEBPACK_IMPORTED_MODULE_0___default().sanitize(this.htmlString);this.location = location;};
 
+var filterDesc = function filterDesc(desc) {
+  var filteredDesc;
+  if (desc === "") {
+    filteredDesc = "Sorry, there is no description available";
+  } else if (desc !== null) {
+    filteredDesc = desc;
+  }
 
-//create movie elements
-var createMovieContainerElement = function createMovieContainerElement(parentElement, title, picture, desc, location) {
-  var container = document.createElement(parentElement);
-  var imagePrepend = "https://image.tmdb.org/t/p/w500/";
-  var htmlString = "\n            <h2>".concat(
-  title, "</h2>\n            <figure class=\"figure\">\n                <img src=\"").concat(
+  return {
+    filteredDesc: filteredDesc };
 
-  imagePrepend + picture, "\" class=\"figure-img img-fluid rounded\"  alt=").concat(title, " />\n                <figcaption class=\"figure-caption\">").concat(
-  desc, "</figcaption>\n            </figure>\n            ");
-
-
-  var cleanString = dompurify__WEBPACK_IMPORTED_MODULE_0___default().sanitize(htmlString);
-  container.insertAdjacentHTML('beforeend', cleanString);
-  location.appendChild(container);
 };
+
 
 var createTitle = function createTitle(genreName, location) {
   var title = document.createElement("h1");
   title.innerHTML = genreName;
   location.appendChild(title);
 };
+
+
 
 //create element function goes here
 
@@ -2107,6 +2146,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, "#dropdownMenuButton {\n    margin-righ
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/css/footer.css":
+/*!******************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/css/footer.css ***!
+  \******************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "div.footer {\n    width: 60%;\n    margin:auto;\n}\n\n.hrTwo {\n    width: 80%;\n}\n\n.hrThree {\n    width: 65%;\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js!./src/css/mainContent.css":
 /*!***********************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./src/css/mainContent.css ***!
@@ -2124,7 +2187,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "div.main-content {\n    display:flex;\n    flex-wrap: wrap;\n    justify-content: center;\n    margin-left: 5%;\n}\n\n\n div.main-content div {\n    display: block;\n    padding:1%;\n    margin: 1%;\n    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n    height: 100%;\n    width: 45%;\n} \n\ndiv.main-content div * {\n    text-align: center;\n}\n\ndiv.main-content h1 {\n    text-align: center;\n    display: block;\n    width: 100%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n    text-align: center !important;\n}\ndiv.main-content {\n    display:flex;\n    flex-wrap: wrap;\n    justify-content: center;\n    margin-left: 5%;\n}\n\n\n div.main-content div {\n    display: block;\n    padding:1%;\n    margin: 1%;\n    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n    height: 100%;\n    width: 45%;\n} \n\ndiv.main-content div * {\n    text-align: center !important;\n    justify-content: center;\n}\n\ndiv.main-content h1 {\n    text-align: center;\n    display: block;\n    width: 100%;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3615,6 +3678,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_buttons_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
+/***/ "./src/css/footer.css":
+/*!****************************!*\
+  !*** ./src/css/footer.css ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_footer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!./footer.css */ "./node_modules/css-loader/dist/cjs.js!./src/css/footer.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_footer_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_footer_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
 
 /***/ }),
 
