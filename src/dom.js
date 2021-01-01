@@ -1,17 +1,18 @@
 const dropDownShow = document.querySelector("#navbarSupportedContent > div > div");
 
-const searchButton = document.querySelector("#navbarSupportedContent > form > button")
+const searchButton = document.querySelector("[data-basicSearchButton]")
 
-const searchInput = document.querySelector("#navbarSupportedContent > form > input");
+const searchInput = document.querySelector("[data-basicSearchInput]");
 
 const mainContent =  document.querySelector(".main-content");
 
 const newMoviesLink = document.querySelector("[data-newMovies]");
 
-module.exports =  { 
+
+export  { 
     dropDownShow, 
     searchButton, 
     searchInput,
     mainContent,
-    newMoviesLink
+    newMoviesLink,
 };

@@ -51,31 +51,37 @@ const  populateGenre = () => {
 //search function on the page
 const searchFunction = () => {
     DOMEl.searchButton.addEventListener('click', (e) => {
-        let dirtyInput = DOMEl.searchInput.value;
-        let queryReadyInput = urlEncode(dirtyInput, 's');
-        DOMEl.mainContent.innerHTML = "";
-        let options = {
-            method: 'GET',
-            url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&query=${queryReadyInput}`
-        }
         e.preventDefault();
-        axios.request(options).then((response)=>{
-            DOMEl.mainContent.innerHTML = "";
-            if(response.data.results.length === 0){alert("No results found.")}
-            response.data.results.forEach((element, index)=>{
-                let picture =  filterPicture(element.backdrop_path);
-                let desc = filterDesc(element.overview);
-                if (index >= 30) {return;}
-                const container = new MovieContainer("div",element.title,picture.filteredPicture,desc.filteredDesc,DOMEl.mainContent,element.release_date);
-                container.createAndAttch();
-            });
-        }).catch(error => console.log(error));
-
+        justSearch();
     });
 
-
-
 }
+
+//search function
+const justSearch = (appendOne,appendTwo) => {
+    let dirtyInput = DOMEl.searchInput.value;
+    let queryReadyInput = urlEncode(dirtyInput, 's');
+    let cleanAppendOne = cleanThis(appendOne);
+    let cleanAppendTwo = cleanThis(appendTwo);
+    DOMEl.mainContent.innerHTML = "";
+    let options = {
+        method: 'GET',
+        url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&query=${queryReadyInput}${cleanAppendOne}${cleanAppendTwo}`
+    }
+    axios.request(options).then((response)=>{
+        DOMEl.mainContent.innerHTML = "";
+        if(response.data.results.length === 0){alert("No results found.")}
+        response.data.results.forEach((element, index)=>{
+            let picture =  filterPicture(element.backdrop_path);
+            let desc = filterDesc(element.overview);
+            if (index >= 30) {return;}
+            const container = new MovieContainer("div",element.title,picture.filteredPicture,desc.filteredDesc,DOMEl.mainContent,element.release_date);
+            container.createAndAttch();
+        });
+    }).catch(error => console.log(error));
+}
+    
+
 
 //new movies
 const newMovies = () => {
@@ -100,8 +106,11 @@ const newMovies = () => {
 }
 
 
+
+
 export {
     populateGenre, 
     searchFunction, 
-    newMovies
+    newMovies,
+    
 };

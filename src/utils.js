@@ -73,9 +73,6 @@ const createTitle = (genreName, location) => {
 }
 
 
-
-//create element function goes here
-
 export  {
     cleanThis, 
     urlEncode, 
