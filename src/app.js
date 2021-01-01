@@ -61,7 +61,7 @@ const searchFunction = () => {
 const justSearch = () => {
     let dirtyInput = DOMEl.searchInput.value;
     let queryReadyInput = urlEncode(dirtyInput, 's');
-    if(DOMEl.searchInput.textContent === '') {
+    if(DOMEl.searchInput.value === "") {
         alert("Please enter a search query.");
         return;
     }
@@ -72,7 +72,10 @@ const justSearch = () => {
     }
     axios.request(options).then((response)=>{
         DOMEl.mainContent.innerHTML = "";
-        if(response.data.results.length === 0){alert("No results found.")}
+        if(response.data.results.length === 0){
+            alert("No results found.");
+            return;
+        }
         response.data.results.forEach((element, index)=>{
             let picture =  filterPicture(element.backdrop_path);
             let desc = filterDesc(element.overview);
