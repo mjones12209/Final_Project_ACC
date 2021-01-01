@@ -58,15 +58,17 @@ const searchFunction = () => {
 }
 
 //search function
-const justSearch = (appendOne,appendTwo) => {
+const justSearch = () => {
     let dirtyInput = DOMEl.searchInput.value;
     let queryReadyInput = urlEncode(dirtyInput, 's');
-    let cleanAppendOne = cleanThis(appendOne);
-    let cleanAppendTwo = cleanThis(appendTwo);
+    if(DOMEl.searchInput.textContent === '') {
+        alert("Please enter a search query.");
+        return;
+    }
     DOMEl.mainContent.innerHTML = "";
     let options = {
         method: 'GET',
-        url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&query=${queryReadyInput}${cleanAppendOne}${cleanAppendTwo}`
+        url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&query=${queryReadyInput}`
     }
     axios.request(options).then((response)=>{
         DOMEl.mainContent.innerHTML = "";
