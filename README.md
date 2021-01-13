@@ -12,7 +12,7 @@ const apiKEY = "YOUR_API_KEY";
 export {apiKEY};
 ```
 
-* After the API key is installed, you can start the app by running "npm run build && npm run start" from the app's root directory.
+* After the API key is installed, you can start the app by running "npm install && npm run build && npm run start" from the app's root directory.
   
 ### Description
 
