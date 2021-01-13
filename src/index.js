@@ -1,5 +1,4 @@
 //*********CSS Styles********//
-require("./css/navHeader.css");
 require("./css/navComponent.css");
 require("./css/buttons.css");
 require("./css/mainContent.css");

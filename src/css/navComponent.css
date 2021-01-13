@@ -1,3 +1,7 @@
-nav.navbar * {
+/* nav.navbar * {
     justify-content: center !important;
+} */
+
+body > div > div > div > ul > li > a {
+    color: black;
 }

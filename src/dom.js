@@ -1,4 +1,4 @@
-const dropDownShow = document.querySelector("#navbarSupportedContent > div > div");
+const dropDownShow = document.querySelector("body > div > div > div > div > div");
 
 const searchButton = document.querySelector("[data-basicSearchButton]")
 
