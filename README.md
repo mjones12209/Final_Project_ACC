@@ -4,6 +4,8 @@
 
 ### Installation instructions
 
+* You will need to have Node.js/Node Package Manager installed on your system to run/build this application.  Installation instructions for Node.js and Node Package Manager can be found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+
 * You will need an API key from The Movie Database for this project to work.  To get an API key click [here](https://www.themoviedb.org/signup) and sign up for an account.  Then after that go to your account settings page and click the "API" link from the lefthand sidebar.  One you obtain an API key create a folder in the app root directory called "keys" and in that folder create a file called "keys.js".   "keys.js" contents should be:
 
 ```javascript  
@@ -12,8 +14,10 @@ const apiKEY = "YOUR_API_KEY";
 export {apiKEY};
 ```
 
-* After the API key is installed, you can start the app by running "npm install && npm run build && npm run start" from the app's root directory.
-  
+* After the API key is installed, you can start/build the app by running one of the following commands from the root directory of the app in a terminal:
+  * "npm install && npm run build && npm run start" for Linux/Mac
+  * "npm install & npm run build & npm run start" for Windows
+
 ### Description
 
 * This project was built with webpack.  
