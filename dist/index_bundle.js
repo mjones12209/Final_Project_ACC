@@ -1928,19 +1928,24 @@ var searchFunction = function searchFunction() {
 };
 
 //search function
-var justSearch = function justSearch(appendOne, appendTwo) {
+var justSearch = function justSearch() {
   var dirtyInput = _dom__WEBPACK_IMPORTED_MODULE_2__.searchInput.value;
   var queryReadyInput = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.urlEncode)(dirtyInput, 's');
-  var cleanAppendOne = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.cleanThis)(appendOne);
-  var cleanAppendTwo = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.cleanThis)(appendTwo);
+  if (_dom__WEBPACK_IMPORTED_MODULE_2__.searchInput.value === "") {
+    alert("Please enter a search query.");
+    return;
+  }
   _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent.innerHTML = "";
   var options = {
     method: 'GET',
-    url: "https://api.themoviedb.org/3/search/movie?api_key=".concat(_keys_keys__WEBPACK_IMPORTED_MODULE_1__.apiKEY, "&query=").concat(queryReadyInput).concat(cleanAppendOne).concat(cleanAppendTwo) };
+    url: "https://api.themoviedb.org/3/search/movie?api_key=".concat(_keys_keys__WEBPACK_IMPORTED_MODULE_1__.apiKEY, "&query=").concat(queryReadyInput) };
 
   axios__WEBPACK_IMPORTED_MODULE_0___default().request(options).then(function (response) {
     _dom__WEBPACK_IMPORTED_MODULE_2__.mainContent.innerHTML = "";
-    if (response.data.results.length === 0) {alert("No results found.");}
+    if (response.data.results.length === 0) {
+      alert("No results found.");
+      return;
+    }
     response.data.results.forEach(function (element, index) {
       var picture = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.filterPicture)(element.backdrop_path);
       var desc = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.filterDesc)(element.overview);
@@ -2055,7 +2060,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dompurify */ "./node_modules/dompurify/dist/purify.js");
 /* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}
+function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 //clean input for html strings
@@ -2086,7 +2091,7 @@ var filterPicture = function filterPicture(backdrop_path) {
 
 //Movie element container
 var MovieContainer =
-function MovieContainer(parentElement, title, picture, desc, location, release) {var _this = this;_classCallCheck(this, MovieContainer);this.
+function MovieContainer(parentElement, title, picture, desc, location, release) {var _this = this;_classCallCheck(this, MovieContainer);_defineProperty(this, "createAndAttch",
 
 
 
@@ -2103,10 +2108,10 @@ function MovieContainer(parentElement, title, picture, desc, location, release) 
 
 
 
-  createAndAttch = function () {
+  function () {
     _this.container.insertAdjacentHTML("beforeend", _this.cleanString);
     _this.location.appendChild(_this.container);
-  };this.container = document.createElement(parentElement); // this.imagePrepend = "https://image.tmdb.org/t/p/w500/";
+  });this.container = document.createElement(parentElement); // this.imagePrepend = "https://image.tmdb.org/t/p/w500/";
   this.picture = picture;this.title = title;this.desc = desc;this.htmlString = "\n            <h2>".concat(title, "</h2>\n            <h6><b>Release Date: </b> ").concat(release, "</h6>\n            <figure class=\"figure\">\n                <img src=\"").concat(this.picture, "\" class=\"figure-img img-fluid rounded\"  alt=").concat(this.title, " />\n                <figcaption class=\"figure-caption\">").concat(this.desc, "</figcaption>\n            </figure>\n        ");this.cleanString = dompurify__WEBPACK_IMPORTED_MODULE_0___default().sanitize(this.htmlString);this.location = location;};
 
 var filterDesc = function filterDesc(desc) {
