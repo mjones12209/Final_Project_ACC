@@ -46,7 +46,7 @@ class MovieContainer {
         this.cleanString = DOMPurify.sanitize(this.htmlString);
         this.location = location;
     }
-    createAndAttch = () => {
+    createAndAttch() {
         this.container.insertAdjacentHTML("beforeend",this.cleanString);
         this.location.appendChild(this.container);
     }
